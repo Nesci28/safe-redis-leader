@@ -1,6 +1,6 @@
 {
   "name": "ts-safe-redis-leader",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Redis leader election implementation that does not have any race conditions in Typescript",
   "main": "dist/safeRedisLeader.js",
   "scripts": {

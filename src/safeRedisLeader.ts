@@ -9,7 +9,8 @@ export enum EmitterEnum {
   NOT_ELECTED = "notElected",
   ELECTED = "elected",
   DEMOTED = "demoted",
-  ERROR = "error"
+  ERROR = "error",
+  RENEW = "renew",
 }
 
 const hashKey = (key: BinaryLike): string => `leader: ${createHash("sha1").update(key).digest("hex")}`;
@@ -63,10 +64,11 @@ export class SafeRedisLeader {
       if (isLeading) {
         this.wasLeading = true;
         this.renewTimeoutId = setTimeout(this.renew.bind(this), this.ttl / 2);
+        this.emitter.emit(EmitterEnum.RENEW);
       } else {
         if (this.wasLeading) {
           this.wasLeading = false;
-          this.emitter.emit("demoted");
+          this.emitter.emit(EmitterEnum.DEMOTED);
         }
         clearTimeout(this.renewTimeoutId);
         this.electTimeoutId = setTimeout(this.runElection.bind(this), this.wait);
